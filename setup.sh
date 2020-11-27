@@ -9,7 +9,7 @@ white="\e[97m"
 # # Clean the docker containers and other if exist
 # printf "\033[0;34mWe will kill all containers already start!\n\033[0m"
 
-clean_file()
+function clean_file()
 {
 	echo $blue"Clean files"$white
 	docker system prune -a
@@ -19,7 +19,7 @@ clean_file()
 	echo $green"File clean"
 }
 
-minikube_setup()
+function minikube_setup()
 {
 	echo $blue"Download kubectl & minikube"$white
 	curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
@@ -36,10 +36,18 @@ minikube_setup()
 	minikube kubectl
 }
 
+function nginx_setup()
+{
+	docker build -t nginx_server srcs/nginx
+	docker images
+	kubectl apply -f srcs/nginx/srcs/nginx.yaml
+}
+
 main()
 {
 	clean_file
 	minikube_setup
+	nginx_setup
 }
 
 main
