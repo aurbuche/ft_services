@@ -1,29 +1,45 @@
-# Clean the docker containers and other if exist
-echo "We will kill all containers already start!"
-docker system prune -a
-sudo pkill nginx
-sudo pkill mysql
-sudo minikube delete
+red="\e[91m"
+green="\e[92m"
+yellow="\e[93m"
+blue="\e[94m"
+purple="\e[95m"
+white="\e[97m"
 
-# To pre-empt errors of Kubernetes
-echo "Go pre-empt all possible errors"
-sudo mkdir /sys/fs/cgroup/systemd
-sudo mount -t cgroup -o none,name=systemd cgroup /sys/fs/cgroup/systemd
 
-# Only for Linux
-sudo groupadd docker
-sudo usermod -aG docker $USER
+# # Clean the docker containers and other if exist
+# printf "\033[0;34mWe will kill all containers already start!\n\033[0m"
 
-# Prerequisite
-curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+clean_file()
+{
+	echo $blue"Clean files"$white
+	docker system prune -a
+	sudo pkill nginx
+	sudo pkill mysql
+	sudo minikube delete
+	echo $green"File clean"
+}
 
-# Install && start minikube
-echo "You're gonna download minikube"
-rm -rf /home/user42/.minikube
-curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 \
-	&& chmod +x minikube
-sudo mkdir -p /usr/local/bin/
-sudo install minikube /usr/local/bin/
-rm minikube
-printf "\033[0;34mminikude is now downloaded, it will start\n\033[0m"
+minikube_setup()
+{
+	echo $blue"Download kubectl & minikube"$white
+	curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+	curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 \
+		&& chmod +x minikube
+	echo -n $blue"Setup minikube" && sleep 1 && echo -n "." && sleep 1 && echo -n "." && sleep 1 && echo "."$white
+	sudo mkdir -p /usr/local/bin/
+	sudo install minikube /usr/local/bin/
+	rm minikube
+	echo $green"Minikube setup!"$white
+	echo $blue"Let's start minikube & kubectl"$white
+	minikube start --driver=docker
+	minikube status
+	minikube kubectl
+}
 
+main()
+{
+	clean_file
+	minikube_setup
+}
+
+main
