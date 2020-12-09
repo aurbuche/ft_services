@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx
+  name: nginx_server
   labels:
     app: nginx
 spec:
@@ -23,7 +23,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx
+  name: nginx_server
   labels:
     app: nginx
 spec:
@@ -38,5 +38,5 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: ft_nginx
+          image: nginx_server
           imagePullPolicy: Never

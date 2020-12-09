@@ -16,22 +16,22 @@ function CLEAN_FILE {
 	pkill nginx
 	pkill mysql
 	minikube delete
-	printf "${Green}File clean\n"
+	printf "${Green}File clean!\n"
 }
 
 function MINIKUBE_SETUP {
-	printf "${Blue}Download kubectl & minikuben${White}"
+	printf "${Blue}Download kubectl & minikube.${White}"
+	# kubectl
+	curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/darwin/amd64/kubectl
+	chmod +x ./kubectl
+	mv ./kubectl /usr/local/bin/kubectl
+	# minikube
 	curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64 \
 		&& chmod +x minikube
-	# printf "$blueSetup minikube" && sleep 1 && printf "-n "." && sleep 1 && printf "-n "." && sleep 1 && printf ""."$White
-	# sudo mkdir -p /usr/local/bin/
-	# sudo install minikube /usr/local/bin/
-	# rm minikube
 	printf "${Green}Minikube setup!\n${White}"
-	printf "${Blue}Let's start minikube & kubectl\n${White}"
+	printf "${Blue}Let's start minikube & kubectl.\n${White}"
 	minikube start --driver=virtualbox
-	# minikube status
-	minikube kubectl
+	minikube status
 }
 
 function NGINX_SETUP {
@@ -43,6 +43,13 @@ function NGINX_SETUP {
 function NGINX_RESTART {
 	docker rm nginx_server
 	D NGINX_SETUP
+}
+
+function STOP {
+	minikube stop
+	minikube delete
+	rm minikube
+	rm kubectl
 }
 
 function D {
@@ -57,18 +64,24 @@ function D {
 
 if [[ $# -ne 0 ]]
 then
-	case $2 in
-		nginx)
-		NGINX_RESTART
+	case $1 in
+		stop)
+		D STOP
 		;;
-		*)
-		NGINX_RESTART
-		;;
+		restart)
+		case $2 in
+			nginx)
+			NGINX_RESTART
+			;;
+			*)
+			NGINX_RESTART
+			;;
+		esac
 	esac
 else
 	I=0
 	D CLEAN_FILE
 	D MINIKUBE_SETUP
-	D NGINX_SETUP
+	# D NGINX_SETUP
 fi
 
