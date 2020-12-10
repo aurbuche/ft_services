@@ -42,6 +42,7 @@ function NGINX_SETUP {
 
 function NGINX_RESTART {
 	docker rm nginx_server
+	docker system prune -a
 	D NGINX_SETUP
 }
 
