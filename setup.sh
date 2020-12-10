@@ -66,6 +66,7 @@ if [[ $# -ne 0 ]]
 then
 	case $1 in
 		stop)
+		I=0
 		D STOP
 		;;
 		restart)
@@ -82,6 +83,6 @@ else
 	I=0
 	D CLEAN_FILE
 	D MINIKUBE_SETUP
-	# D NGINX_SETUP
+	D NGINX_SETUP
 fi
 
