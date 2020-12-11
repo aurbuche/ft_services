@@ -20,11 +20,11 @@ function CLEAN_FILE {
 }
 
 function MINIKUBE_SETUP {
-	printf "${Blue}Download kubectl & minikube.${White}"
+	printf "${Blue}Download kubectl & minikube.\n${White}"
 	# kubectl
 	curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/darwin/amd64/kubectl
 	chmod +x ./kubectl
-	mv ./kubectl /usr/local/bin/kubectl
+	# mv ./kubectl /usr/local/bin/kubectl
 	# minikube
 	curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64 \
 		&& chmod +x minikube
@@ -37,6 +37,7 @@ function MINIKUBE_SETUP {
 function NGINX_SETUP {
 	docker build -t nginx_server srcs/nginx
 	docker images
+	# docker run -d -p 80:80 -p 443:443 nginx_server
 	kubectl apply -f srcs/nginx/srcs/nginx.yaml
 }
 
