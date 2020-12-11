@@ -15,6 +15,7 @@ function CLEAN_FILE {
 	docker system prune -a
 	pkill nginx
 	pkill mysql
+	minikube stop
 	minikube delete
 	printf "${Green}File clean!\n"
 }

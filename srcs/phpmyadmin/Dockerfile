@@ -4,12 +4,9 @@ FROM alpine:3.7
 LABEL maintainer="aurbuche <aurbuche@student.42.fr>"
 
 #Install packages
-RUN			apt-get update && \
-			apt-get -y upgrade && \
-			apt-get -y install wget && \
-			apt-get -y install php php-fpm php-mysql php-gd php-soap php-curl php-gd php-cli php-mbstring php-xml php-xmlrpc php-zip
-
-EXPOSE 5000
+RUN		apk update
+RUN		apk upgrade
+RUN		apk
 
 #PHPMyAdmin setup
 RUN			wget -q https://files.phpmyadmin.net/phpMyAdmin/4.9.2/phpMyAdmin-4.9.2-all-languages.tar.xz

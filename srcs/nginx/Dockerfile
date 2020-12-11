@@ -1,5 +1,5 @@
 # Image
-FROM alpine:latest
+FROM alpine:3.7
 
 LABEL maintainer="aurbuche <aurbuche@student.42.fr>"
 
@@ -28,7 +28,6 @@ RUN		adduser -D admin && \
 		openssl req -x509 -nodes -days 365 -subj '/C=FR/ST=Auvergne-Rhone-Alpe/L=Lyon/CN=localhost' -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
 
 #Setup Nginx
-# RUN		rm -rf /etc/nginx/nginx.conf
 COPY	srcs/nginx.conf /etc/nginx/nginx.conf
 COPY	srcs/index.html /www/html/
 
