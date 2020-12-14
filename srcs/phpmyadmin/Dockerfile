@@ -20,6 +20,3 @@ RUN		openrc
 RUN		touch /run/openrc/softlevel
 
 EXPOSE		5000
-
-RUN			echo "\033[38;2;0;128;0mPHPMyAdmin is installed\033[0m"
-

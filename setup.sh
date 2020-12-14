@@ -35,20 +35,38 @@ function MINIKUBE_SETUP {
 	minikube status
 }
 
+# function METALLB_SETUP {
+# 	printf "${Blue}Download metallb.${NoColor}\n"
+# 	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/namespace.yaml
+# 	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/metallb.yaml
+# 	kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+# }
+
 function NGINX_SETUP {
 	docker build -t nginx_server srcs/nginx
 	docker images
-	# docker run -d -p 80:80 -p 443:443 nginx_server
+	docker run -d --name="nginx_server" -p 80:80 -p 443:443 nginx_server
 	kubectl apply -f srcs/nginx/srcs/nginx.yaml
 }
 
+# function PHPMYADMIN_SETUP {
+# 	docker build -t phpmyadmin_server srcs/phpmyadmin
+# 	docker run -d --name="phpmyadmin_server" -p 5000 phpmyadmin_server
+# 	printf "${Green}PHPMyAdmin is setup!\n${NoColor}"
+# }
+
 function NGINX_RESTART {
-	docker rm nginx_server
+	docker stop nginx_server && docker rm nginx_server
 	docker system prune -a
 	D NGINX_SETUP
 }
 
+# function METALLB_RESTART {
+	
+# }
+
 function STOP {
+	docker stop nginx_server && docker rm nginx_server
 	minikube stop
 	minikube delete
 	rm minikube
@@ -77,8 +95,12 @@ then
 			nginx)
 			NGINX_RESTART
 			;;
+			metallb)
+			# METALLB_RESTART
+			;;
 			*)
 			NGINX_RESTART
+			# METALLB_RESTART
 			;;
 		esac
 	esac
@@ -87,5 +109,7 @@ else
 	D CLEAN_FILE
 	D MINIKUBE_SETUP
 	D NGINX_SETUP
+	# D METALLB_SETUP
+	# D PHPMYADMIN_SETUP
 fi
 
