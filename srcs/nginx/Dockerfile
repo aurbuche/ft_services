@@ -1,38 +1,24 @@
 # Image
 FROM alpine:3.7
 
-LABEL maintainer="aurbuche <aurbuche@student.42.fr>"
+FROM alpine:latest
 
-#Install packages
-RUN		apk update
-RUN		apk add nginx
-RUN		apk add openrc --no-cache
-RUN		apk add openssh
-RUN		apk add openssl
-RUN		apk add bash
-RUN		apk add zsh
+RUN apk update
+RUN apk add nginx
+RUN apk add openssl
 
-RUN		adduser -D -g 'www' www
-RUN		openrc
-RUN		touch /run/openrc/softlevel
+RUN adduser -D -g 'www' www
+RUN mkdir /www
+RUN chown -R www:www /var/lib/nginx
+RUN chown -R www:www /www
+COPY srcs/nginx.conf /etc/nginx/nginx.conf
+COPY srcs/index.html /www/
 
-RUN		mkdir /www
-RUN		chown -R www:www /var/lib/nginx
-RUN		chown -R www:www /www
-RUN		mkdir -p /etc/nginx
-RUN		ssh-keygen -A
+RUN mkdir -p /run/nginx /www /etc/nginx/ssl
 
-#Openssl
-RUN		adduser -D admin && \
-		echo "admin:password" | chpasswd && \
-		openssl req -x509 -nodes -days 365 -subj '/C=FR/ST=Auvergne-Rhone-Alpe/L=Lyon/CN=localhost' -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/certs/localhost.key -out /etc/ssl/certs/localhost.crt \
+    -subj "/C=FR/ST=France/L=Lyon/O=42Lyon/OU=42Network/CN=localhost/emailAddress=akerdeka@student.42lyon.fr"
 
-#Setup Nginx
-COPY	srcs/nginx.conf /etc/nginx/nginx.conf
-COPY	srcs/index.html /www/html/
+EXPOSE 80 443
 
-CMD		nginx -g 'daemon off;'
-
-EXPOSE	22 80 443
-
-RUN		printf "\033[0;32mAfter that everything will be OK, you can go to https://localhost and see your container ✅\n\033[0m"
+CMD nginx -g 'pid /tmp/nginx.pid; daemon off;'
