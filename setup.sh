@@ -31,6 +31,7 @@ function MINIKUBE_SETUP {
 		&& chmod +x minikube
 	printf "${Green}Minikube setup!\n${White}"
 	printf "${Blue}Let's start minikube & kubectl.\n${White}"
+	eval $(minikube docker-env)
 	minikube start --driver=virtualbox
 	minikube status
 }
@@ -105,6 +106,7 @@ then
 		esac
 	esac
 else
+	minikube docker-env
 	I=0
 	D CLEAN_FILE
 	D MINIKUBE_SETUP
