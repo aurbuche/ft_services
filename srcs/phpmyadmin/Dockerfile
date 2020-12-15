@@ -8,15 +8,17 @@ RUN		apk update
 RUN		apk upgrade
 RUN		apk add php7 php7-fpm php7-opcache php7-gd php7-mysqli php7-zlib php7-curl php7-mbstring php7-json php7-session
 
-#PHPMyAdmin setup
-RUN		wget -q https://files.phpmyadmin.net/phpMyAdmin/4.9.2/phpMyAdmin-4.9.2-all-languages.tar.xz
-
-RUN		tar -xf phpMyAdmin-4.9.2-all-languages.tar.xz && \
-		rm -rf phpMyAdmin-4.9.2-all-languages.tar.xz && \
-		mv phpMyAdmin-4.9.2-all-languages /www
-
 RUN		apk add openrc
 RUN		openrc
 RUN		touch /run/openrc/softlevel
+
+#PHPMyAdmin setup
+RUN		mkdir -p /usr/share/webapps/
+RUN		cd /usr/share/webapps
+RUN		wget http://files.directadmin.com/services/all/phpMyAdmin/phpMyAdmin-5.0.2-all-languages.tar.gz
+RUN		tar zxvf phpMyAdmin-5.0.2-all-languages.tar.gz
+RUN		rm phpMyAdmin-5.0.2-all-languages.tar.gz
+RUN		mv phpMyAdmin-5.0.2-all-languages phpmyadmin
+RUN		chmod -R 777 /usr/share/webapps
 
 EXPOSE	5000

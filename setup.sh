@@ -50,11 +50,11 @@ function NGINX_SETUP {
 	kubectl apply -f srcs/nginx/srcs/nginx.yaml
 }
 
-# function PHPMYADMIN_SETUP {
-# 	docker build -t phpmyadmin_server srcs/phpmyadmin
-# 	docker run -d --name="phpmyadmin_server" -p 5000 phpmyadmin_server
-# 	printf "${Green}PHPMyAdmin is setup!\n${NoColor}"
-# }
+function PHPMYADMIN_SETUP {
+	docker build -t phpmyadmin_server srcs/phpmyadmin
+	docker run -d --name="phpmyadmin_server" -p 5000 phpmyadmin_server
+	printf "${Green}PHPMyAdmin is setup!\n${NoColor}"
+}
 
 function NGINX_RESTART {
 	docker stop nginx_server && docker rm nginx_server
@@ -112,6 +112,6 @@ else
 	D MINIKUBE_SETUP
 	D NGINX_SETUP
 	# D METALLB_SETUP
-	# D PHPMYADMIN_SETUP
+	D PHPMYADMIN_SETUP
 fi
 

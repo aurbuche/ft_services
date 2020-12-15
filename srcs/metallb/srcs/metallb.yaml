@@ -1,4 +1,4 @@
-apiVersion: v1
+vapiVersion: v1
 kind: ConfigMap
 metadata:
   namespace: metallb-system
