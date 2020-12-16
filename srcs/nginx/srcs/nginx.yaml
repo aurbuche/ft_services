@@ -22,14 +22,12 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx
-  labels:
-    app: nginx
+  name: nginx-deployment
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: nginx
+  replicas: 1
   template:
     metadata:
       labels:
@@ -37,5 +35,6 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: nginx_server
-          imagePullPolicy: Never
+          image: nginx
+          ports:
+            - containerPort: 80

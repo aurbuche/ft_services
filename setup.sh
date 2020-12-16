@@ -25,13 +25,11 @@ function MINIKUBE_SETUP {
 	# kubectl
 	curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/darwin/amd64/kubectl
 	chmod +x ./kubectl
-	# mv ./kubectl /usr/local/bin/kubectl
 	# minikube
 	curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64 \
 		&& chmod +x minikube
 	printf "${Green}Minikube setup!\n${White}"
 	printf "${Blue}Let's start minikube & kubectl.\n${White}"
-	eval $(minikube docker-env)
 	minikube start --driver=virtualbox
 	minikube status
 }
@@ -46,15 +44,13 @@ function MINIKUBE_SETUP {
 function NGINX_SETUP {
 	docker build -t nginx_server srcs/nginx
 	docker images
-	docker run -d --name="nginx_server" -p 80:80 -p 443:443 nginx_server
 	kubectl apply -f srcs/nginx/srcs/nginx.yaml
 }
 
-function PHPMYADMIN_SETUP {
-	docker build -t phpmyadmin_server srcs/phpmyadmin
-	docker run -d --name="phpmyadmin_server" -p 5000 phpmyadmin_server
-	printf "${Green}PHPMyAdmin is setup!\n${NoColor}"
-}
+#function PHPMYADMIN_SETUP {
+#	docker build -t phpmyadmin_server srcs/phpmyadmin
+#	printf "${Green}PHPMyAdmin is setup!\n${NoColor}"
+#}
 
 function NGINX_RESTART {
 	docker stop nginx_server && docker rm nginx_server
@@ -73,11 +69,11 @@ function STOP {
 	rm minikube
 	rm kubectl
 }
-
 function D {
   printf "${Purple}[$I] $1\n${NoColor}" | tr '_' ' '
   ((I++))
   eval $1
+
   if [[ $? -ne 0 ]]; then
     printf "An error occurred, exiting ..."
     exit;
@@ -112,6 +108,10 @@ else
 	D MINIKUBE_SETUP
 	D NGINX_SETUP
 	# D METALLB_SETUP
-	D PHPMYADMIN_SETUP
+#	D PHPMYADMIN_SETUP
 fi
 
+# Command:
+
+#	docker run -d --name="nginx_server" -p 80:80 -p 443:443 nginx_server
+#	eval $(minikube docker-env)
