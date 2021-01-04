@@ -6,6 +6,8 @@ LABEL	maintainer="aurbuche <aurbuche@student.42lyon.fr>"
 RUN		apk update
 RUN		apk add nginx
 RUN		apk add openssl
+RUN		apk add openrc
+RUN		apk add sudo vim git
 
 RUN		adduser -D -g 'www' www
 RUN		mkdir /www
