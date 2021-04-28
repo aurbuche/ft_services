@@ -38,7 +38,7 @@ function METALLB_SETUP {
   kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/namespace.yaml
   kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/metallb.yaml
   kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
-  kubectl create -f srcs/metallb/srcs/metallbConfigMap.yaml
+  kubectl apply -f srcs/metallb/srcs/metallbConfigMap.yaml
 }
 
 function NGINX_SETUP {
@@ -70,7 +70,7 @@ function NGINX_RESTART {
 
 function STOP {
   kubectl delete service nginx-service && kubectl delete deployment nginx-deployment
-  docker stop nginx_server && docker rm nginx_server
+#  docker stop nginx_server && docker rm nginx_server
 	minikube stop
 	minikube delete
 	rm minikube
@@ -131,7 +131,7 @@ else
   eval $(minikube docker-env)
 	D METALLB_SETUP
 	D NGINX_SETUP
-	D MYSQL_SETUP
+# D MYSQL_SETUP
 #	D PHPMYADMIN_SETUP
 fi
 

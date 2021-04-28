@@ -1,5 +1,5 @@
 #Image
-FROM	alpine:latest
+FROM	alpine:3.12
 
 LABEL	maintainer="aurbuche <aurbuche@student.42.fr>"
 
@@ -12,7 +12,6 @@ RUN		apk add openrc
 RUN		openrc
 RUN		touch /run/openrc/softlevel
 
-#PHPMyAdmin setup
 RUN		mkdir -p /usr/share/webapps/
 RUN		cd /usr/share/webapps
 RUN		wget http://files.directadmin.com/services/all/phpMyAdmin/phpMyAdmin-5.0.2-all-languages.tar.gz

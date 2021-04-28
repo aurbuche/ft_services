@@ -6,10 +6,9 @@ LABEL	maintainer="aurbuche <aurbuche@student.42lyon.fr>"
 RUN		apk upgrade
 RUN		apk update
 RUN		apk add openrc vim --no-cache
-RUN		apk add mariadb mariadb-common mariadb-client
+RUN		apk add mysql mysql-client
+RUN		apk add wget
 
-RUN		openrc
-RUN		service mariadb start
-RUN		status
+CMD		./setup.sh
 
-RUN		printf "\033[0;32mMySQL is install and started!\033[0m\n"
+RUN		echo "\033[38;2;0;128;0mThe database is up!\033[0m"
