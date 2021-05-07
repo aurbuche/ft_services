@@ -6,7 +6,7 @@ LABEL	maintainer="aurbuche <aurbuche@student.42lyon.fr>"
 RUN		apk upgrade
 RUN		apk update
 RUN		apk add openrc vim --no-cache
-RUN		apk add mysql mysql-client
+RUN		apk add mysql mysql-client mysql-server
 RUN		apk add wget
 
 CMD		./setup.sh

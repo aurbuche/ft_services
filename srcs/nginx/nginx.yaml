@@ -18,6 +18,7 @@ spec:
       - name: nginx
         image: nginx_server
         imagePullPolicy: Never
+      restartPolicy: Always
 
 ---
 
@@ -25,6 +26,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: nginx-service
+  annotations:
+    metallb.universe.tf/address-pool: default
+    metallb.universe.tf/allow-shared-ip: shared
   labels:
     app: nginx
 spec:
